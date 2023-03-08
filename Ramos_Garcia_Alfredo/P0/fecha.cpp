@@ -1,25 +1,74 @@
 #include "fecha.hpp"
 #include <iostream>
-#include "time.h"
+#include <ctime>
 
-time_t now; 
-struct tm *local = localtime(&now);
-
-int day = local->tm_mday + 7;            // obtener el día del mes (1 a 31)
-int month = local->tm_mon + 3;      // obtener el mes del año (0 a 11)
-int year = local->tm_year + 1953;
+Fecha::Fecha(int dia, int mes, int anno): _dia(dia), _mes(mes), _anno(anno) {
+    fSistema(dia, mes, anno);
+    fValida();
+}
 
 
-Fecha::Fecha(int dia, int mes, int anno): _dia(dia), _mes(mes), _anno(anno) {}
+Fecha::Fecha(const char* cadena)
+{
+    int dia, mes, anno;
+     
+    if(sscanf(cadena, "%d/%d/%d", &dia, &mes, &anno) != 3)
+        throw Invalida("fecha incorrecta");
+    else{
+        
+        _dia = dia;
+        _mes = mes;
+        _anno = anno;
 
-Fecha::Fecha(int dia, int mes): _dia(dia), _mes(mes), _anno(year) {}
+        fSistema(dia, mes, anno);
+        fValida();
+    }
+}
 
-Fecha::Fecha(int dia): _dia(dia), _mes(month), _anno(year) {}
+void Fecha::fSistema(int d, int m, int a){
 
-Fecha::Fecha(): _dia(day), _mes(month), _anno(year) {}
+    std::time_t tc = std::time(nullptr);
+    std::tm* td = std::localtime(&tc);
 
-Fecha::Fecha(const Fecha &a): _dia(a._dia), _mes(a._mes), _anno(a._anno) {}
+    if (d == 0)
+        _dia = td->tm_mday;
+    
+    if (m == 0)
+        _mes = td->tm_mon + 1;
 
+    if (a == 0)
+        _anno = td->tm_year + 1900;
+}
+
+void Fecha::fValida()
+{
+    static const int dias [] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
+    int esBisiesto = static_cast<int>(_anno % 4 == 0 && (_anno % 400 == 0 || anno_ % 100 != 0));
+
+    if(_anno > Fecha::AnnoMaximo || _anno < Fecha::AnnoMinimo)
+    {
+        throw Invalida("Anno invalido");
+    }
+
+    if(_mes > 12 || _mes < 1)
+    {
+        throw Invalida("Mes invalido");
+    }
+
+    if(_mes == 2){
+        if(_dia > dias[_mes] + esBisiesto || _dia < 1)
+        {
+            throw Invalida("Dia invalido");
+        }
+    }
+    else{
+        if(_dia > dias[_mes] || _dia < 1)
+        {
+            throw Invalida("Dia invalido");
+        }
+    }
+
+}
 void Fecha::mostrar() const{
 
     using namespace std;
