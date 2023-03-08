@@ -9,10 +9,13 @@ int main (){
     Fecha b(18,7);
     Fecha c(18);
     Fecha hoy;
+    Fecha d(c);
+    
 
     a.mostrar();
     b.mostrar();
     c.mostrar();
     hoy.mostrar();
+    d.mostrar();    
 
 }

@@ -18,6 +18,8 @@ Fecha::Fecha(int dia): _dia(dia), _mes(month), _anno(year) {}
 
 Fecha::Fecha(): _dia(day), _mes(month), _anno(year) {}
 
+Fecha::Fecha(const Fecha &a): _dia(a._dia), _mes(a._mes), _anno(a._anno) {}
+
 void Fecha::mostrar() const{
 
     using namespace std;

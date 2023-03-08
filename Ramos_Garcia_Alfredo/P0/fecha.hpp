@@ -12,6 +12,7 @@ class Fecha{
         Fecha(int dia, int mes);
         Fecha(int dia);
         Fecha();
+        Fecha(const Fecha &a);
         void mostrar() const;
 
     private:
