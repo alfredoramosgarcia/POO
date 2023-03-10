@@ -43,11 +43,11 @@ void Fecha::fSistema(int d, int m, int a){
 void Fecha::fValida()
 {
     static const int dias [] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
-    int esBisiesto = static_cast<int>(_anno % 4 == 0 && (_anno % 400 == 0 || anno_ % 100 != 0));
+    int esBisiesto = static_cast<int>(_anno % 4 == 0 && (_anno % 400 == 0 || _anno % 100 != 0));
 
     if(_anno > Fecha::AnnoMaximo || _anno < Fecha::AnnoMinimo)
     {
-        throw Invalida("Anno invalido");
+        throw Invalida("Añoo invalido");
     }
 
     if(_mes > 12 || _mes < 1)
