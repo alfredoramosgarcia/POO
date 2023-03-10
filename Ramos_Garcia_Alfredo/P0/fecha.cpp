@@ -21,7 +21,6 @@ Fecha::Fecha(const char* cadena)
         _anno = anno;
 
         fSistema(dia, mes, anno);
-        fValida();
     }
 }
 
@@ -47,7 +46,7 @@ void Fecha::fValida()
 
     if(_anno > Fecha::AnnoMaximo || _anno < Fecha::AnnoMinimo)
     {
-        throw Invalida("Añoo invalido");
+        throw Invalida("Año invalido.");
     }
 
     if(_mes > 12 || _mes < 1)
@@ -69,6 +68,28 @@ void Fecha::fValida()
     }
 
 }
+
+const char* Fecha::cadena() const noexcept
+{
+    const char* dias[] = {"domingo","lunes","martes","miércoles","jueves","viernes","sábado"};
+
+    const char* meses[] = {"enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"};
+
+    static char fecha[40];
+
+    tm f = {0};
+
+    f.tm_mday = dia();
+    f.tm_mon = mes() - 1;
+    f.tm_year = anno() - 1900;
+
+    mktime(&f);
+    sprintf(fecha,"%s %d de %s de %d", dias[f.tm_wday], f.tm_mday, meses[f.tm_mon], f.tm_year + 1900);
+
+    return fecha;
+
+}
+
 void Fecha::mostrar() const{
 
     using namespace std;
@@ -87,4 +108,136 @@ void Fecha::mostrar() const{
         case 11: cout<<_dia<<" de noviembre de "<<_anno<<endl; break;
         case 12: cout<<_dia<<" de diciembre de "<<_anno<<endl; break;
     } 
+}
+
+//SOBRECARGA DE OPERADORES ARITMETICOS
+
+
+Fecha& Fecha::operator +=(int n)
+{
+    if(n!=0){
+        tm faux = {};
+        faux.tm_mday = _dia + n;
+        faux.tm_mon = _mes - 1;
+        faux.tm_year = _anno - 1900;
+
+        mktime(&faux);
+
+        _anno = faux.tm_year + 1900;
+        _mes = faux.tm_mon + 1;
+        _dia = faux.tm_mday;
+        fValida();
+    }
+
+    return *this;
+}
+
+Fecha& Fecha::operator -=(int n)
+{
+    return *this += -n;
+}
+
+Fecha Fecha::operator +(int n) const
+{
+    Fecha f = *this;
+    f += n;
+    return f;
+}
+
+Fecha Fecha::operator -(int n) const
+{
+    Fecha f = *this;
+    f += -n;
+    return f;
+}
+
+Fecha& Fecha::operator --()
+{
+    return *this += -1;
+}
+
+Fecha& Fecha::operator ++()
+{
+    return *this += 1;
+}
+
+Fecha Fecha::operator --(int)
+{
+    Fecha f = *this;
+    *this += -1;
+    return f;
+}
+
+Fecha Fecha::operator ++(int)
+{
+    Fecha f = *this;
+    *this += 1;
+    return f;
+}
+
+//SOBRECARGA DE OPERACIORES DE COMPARACION
+
+
+bool operator ==(const Fecha& f1, const Fecha& f2)
+{
+    return (f1.anno() == f2.anno()) && (f1.mes() == f2.mes()) && (f1.dia() == f2.dia());
+    
+}
+
+bool operator >(const Fecha& f1, const Fecha& f2)
+{
+    if(f1.anno() > f2.anno())
+    {return true;}
+    else if(f1.anno() == f2.anno() && f1.mes() > f2.mes()) {return true;}
+    else if(f1.anno() == f2.anno() && f1.mes() == f2.mes() && f1.dia() > f2.dia()) {return true;}
+    else return false;
+
+}
+
+bool operator <(const Fecha& f1, const Fecha& f2)
+{
+    return (f2 > f1);
+}
+
+bool operator >=(const Fecha& f1, const Fecha& f2)
+{
+    return (f1 > f2 || f1 == f2);
+}
+
+bool operator <=(const Fecha& f1, const Fecha& f2)
+{
+    return (f1 < f2 || f1 == f2);
+}
+
+bool operator !=(const Fecha& f1, const Fecha& f2)
+{
+    return !(f1 == f2);
+}
+
+
+
+//OPERADORES DE ENTRADA Y SALIDA
+
+std::istream& operator >> (std::istream& is, Fecha& f)
+{
+    char* cadena = new char[11];
+    is.getline(cadena,11);
+
+    try
+    {
+        f = Fecha(cadena);
+    } catch(Fecha::Invalida e)
+    {
+        is.setstate(std::ios_base::failbit);
+        throw e;
+    }
+
+    return is;
+
+}
+
+std::ostream& operator << (std::ostream& output, const Fecha& f)
+{
+    output << f.cadena();
+    return output;
 }
