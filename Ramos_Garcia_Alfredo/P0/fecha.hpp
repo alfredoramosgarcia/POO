@@ -11,19 +11,17 @@ class Fecha{
         explicit Fecha(int dia = 0, int mes = 0, int anno = 0);
         Fecha(const char* cadena);
         
-        void mostrar() const;
+        //void mostrar() const; //Metodo de prueba para el main
 
         static const int AnnoMaximo = 2037;
         static const int AnnoMinimo = 1902;
 
         class Invalida{
             public:
-                Invalida(const char* razon) : razon_{razon} {}
-                const char* por_que() const noexcept { return razon_; }
+                Invalida(const char* razon) : _razon{razon} {}
+                const char* por_que() const noexcept { return _razon; }
             private:
-                const char* razon_;
-
-
+                const char* _razon;
         };
 
         Fecha operator ++(int); 

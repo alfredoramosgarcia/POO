@@ -10,12 +10,15 @@ int main (){
     Fecha c(18);
     Fecha hoy;
     Fecha d(c);
+    Fecha z(8,5,1996);
+    const char* cadena = z;
     
-    a.mostrar();
-    b.mostrar();
-    c.mostrar();
-    hoy.mostrar();
-    d.mostrar();
+    
+    cout << a << endl;
+    cout << b << endl;
+    cout << c << endl;
+    cout << hoy << endl;
+    cout << d << endl;
 
     try {Fecha t("20/03/2023"); t++; cout << t <<endl; }
     catch(Fecha::Invalida e) { std::cout<<e.por_que()<<endl; }

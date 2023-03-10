@@ -71,7 +71,7 @@ void Fecha::fValida()
 
 const char* Fecha::cadena() const noexcept
 {
-    const char* dias[] = {"domingo","lunes","martes","miércoles","jueves","viernes","sábado"};
+    const char* dias[] = {"Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"};
 
     const char* meses[] = {"enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"};
 
@@ -90,7 +90,7 @@ const char* Fecha::cadena() const noexcept
 
 }
 
-void Fecha::mostrar() const{
+/*void Fecha::mostrar() const{
 
     using namespace std;
 
@@ -108,7 +108,7 @@ void Fecha::mostrar() const{
         case 11: cout<<_dia<<" de noviembre de "<<_anno<<endl; break;
         case 12: cout<<_dia<<" de diciembre de "<<_anno<<endl; break;
     } 
-}
+}*/
 
 //SOBRECARGA DE OPERADORES ARITMETICOS
 
